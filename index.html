@@ -5,296 +5,336 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Siddhant Goyal: problems I found, what I built for them, and what happened.">
 <title>Siddhant Goyal's Casebook</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-/* Layout: a casebook. Short intro, filter by outcome, then one card per problem in a single readable column. */
+/* Layout: top bar; hero = headline + results panel; story; timeline; case grid in three groups; footer. */
 :root {
-  --bg: #f3f4f1; --paper: #ffffff; --ink: #17201c; --muted: #5a6560; --line: #d9ded9;
-  --accent: #1f6f5c; --accent-soft: #dcefe8;
-  --shipped: #1f6f5c; --shipped-bg: #dcefe8;
+  --bg: #f3f4f1; --paper: #ffffff; --ink: #17201c; --muted: #5a6560; --line: #dde2dd;
+  --accent: #1f6f5c; --accent-soft: #e2f0eb; --hero: #17201c; --hero-ink: #f1f5f2; --hero-muted: #a9b8b0;
+  --shipped: #1f6f5c; --shipped-bg: #e2f0eb;
   --stopped: #9b4d1d; --stopped-bg: #f6e6da;
-  --research: #3d4f9a; --research-bg: #e3e7f7;
+  --research: #3d4f9a; --research-bg: #e5e9f8;
   --f-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --f-body: "Source Serif 4", Georgia, serif;
   --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #111614; --paper: #19201d; --ink: #e6ece8; --muted: #9aa69f; --line: #2b3430;
-  --accent: #6fc9ae; --accent-soft: #1c3029;
-  --shipped: #6fc9ae; --shipped-bg: #1c3029; --stopped: #f0a676; --stopped-bg: #3a2619;
-  --research: #a7b4f0; --research-bg: #232a45; color-scheme: dark } }
+  --bg: #0f1412; --paper: #182019; --ink: #e6ece8; --muted: #9aa69f; --line: #2a332e;
+  --accent: #6fc9ae; --accent-soft: #1b2e27; --hero: #1d2a24; --hero-ink: #eef3f0; --hero-muted: #9fb2a8;
+  --shipped: #6fc9ae; --shipped-bg: #1b2e27; --stopped: #f0a676; --stopped-bg: #382517;
+  --research: #a7b4f0; --research-bg: #222944; color-scheme: dark } }
 :root[data-theme="dark"] {
-  --bg: #111614; --paper: #19201d; --ink: #e6ece8; --muted: #9aa69f; --line: #2b3430;
-  --accent: #6fc9ae; --accent-soft: #1c3029;
-  --shipped: #6fc9ae; --shipped-bg: #1c3029; --stopped: #f0a676; --stopped-bg: #3a2619;
-  --research: #a7b4f0; --research-bg: #232a45; color-scheme: dark }
+  --bg: #0f1412; --paper: #182019; --ink: #e6ece8; --muted: #9aa69f; --line: #2a332e;
+  --accent: #6fc9ae; --accent-soft: #1b2e27; --hero: #1d2a24; --hero-ink: #eef3f0; --hero-muted: #9fb2a8;
+  --shipped: #6fc9ae; --shipped-bg: #1b2e27; --stopped: #f0a676; --stopped-bg: #382517;
+  --research: #a7b4f0; --research-bg: #222944; color-scheme: dark }
 
-body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.6; }
-.wrap { max-width: 760px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 72px; display: grid; gap: 40px; }
-header { display: grid; gap: 14px; }
-.kicker { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
-h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(34px, 6vw, 52px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -0.015em; }
-.lede { font-size: 18px; max-width: 62ch; display: grid; gap: 12px; } .lede p { margin: 0; }
-.meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
-.meta a { color: var(--accent); }
-.meta .sel { user-select: all; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16.5px; line-height: 1.6; }
+a { color: var(--accent); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 24px; }
 
-.pattern { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 20px 22px; display: grid; gap: 10px; }
-.pattern h2 { font-family: var(--f-display); font-size: 20px; margin: 0; }
-.pattern ol { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
-.tally { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
-.tally b { color: var(--ink); font-size: 20px; font-family: var(--f-display); margin-right: 4px; }
+.top { border-bottom: 1px solid var(--line); background: var(--paper); }
+.top .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 24px; padding-block: 14px; }
+.brand { display: flex; align-items: center; gap: 12px; font-family: var(--f-display); font-weight: 700; font-size: 18px; }
+.mark { width: 34px; height: 34px; border-radius: 8px; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-size: 14px; }
+.contact { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 13px var(--f-mono); color: var(--muted); }
+.contact .sel { user-select: all; }
+
+.hero { padding-block: 56px 40px; display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: end; }
+.kicker { font: 500 12px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(36px, 5.2vw, 60px); line-height: 1.02; letter-spacing: -0.02em; margin: 0 0 18px; text-wrap: balance; }
+.sub { font-size: 19px; max-width: 46ch; margin: 0; }
+.sub b { font-weight: 600; }
+.panel { background: var(--hero); color: var(--hero-ink); border-radius: 14px; padding: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px 18px; }
+.panel .lbl { grid-column: 1 / -1; font: 500 11px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--hero-muted); }
+.stat { display: grid; gap: 2px; }
+.stat .n { font-family: var(--f-display); font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat .t { font-size: 13.5px; line-height: 1.35; color: var(--hero-muted); }
+
+section.block { padding-block: 36px; border-top: 1px solid var(--line); }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 20px; margin-bottom: 22px; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 28px; margin: 0; letter-spacing: -0.01em; }
+.sec-note { color: var(--muted); font-size: 15px; margin: 0; }
+
+.story { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; }
+.story h3 { font: 500 12px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+.story p { margin: 0; }
+.method { margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: step; }
+.method div { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font-size: 15px; line-height: 1.45; }
+.method div::before { counter-increment: step; content: "Step " counter(step); display: block; font: 500 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+
+.tl-scroll { overflow-x: auto; }
+.tl { display: grid; grid-template-columns: repeat(5, minmax(150px, 1fr)); min-width: 760px; position: relative; }
+.tl::before { content: ""; position: absolute; top: 7px; left: 0; right: 0; height: 2px; background: var(--line); }
+.yr { position: relative; padding-right: 14px; }
+.yr::before { content: ""; width: 16px; height: 16px; border-radius: 50%; background: var(--paper); border: 3px solid var(--accent); position: absolute; top: 0; left: 0; }
+.yr .y { font-family: var(--f-display); font-weight: 800; font-size: 22px; margin: 26px 0 8px; }
+.yr ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14.5px; line-height: 1.35; }
+.tag { font: 500 10.5px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; margin-right: 6px; }
+.tag.w { background: var(--accent-soft); color: var(--shipped); }
+.tag.b { background: var(--stopped-bg); color: var(--stopped); }
 
 .filters { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { font: 500 13px var(--f-mono); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+.chip { font: 500 13px var(--f-mono); padding: 7px 13px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-.group-title { font-family: var(--f-display); font-size: 24px; margin: 8px 0 -16px; }
-.cases { display: grid; gap: 18px; }
-.case { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 22px 24px; display: grid; gap: 12px; min-width: 0; }
-.case-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; }
-.case h3 { font-family: var(--f-display); font-weight: 600; font-size: 22px; line-height: 1.2; margin: 0; text-wrap: balance; }
-.where { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
-.pill { font: 500 11px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+.group { margin-top: 30px; }
+.group-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 14px; }
+.group-h h3 { font-family: var(--f-display); font-size: 21px; margin: 0; }
+.group-h span { color: var(--muted); font-size: 14.5px; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.case { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.case .metric { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 12px; }
+.case .big { font-family: var(--f-display); font-weight: 800; font-size: 32px; line-height: 1.05; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.case .big small { font-size: 15px; font-weight: 500; color: var(--muted); margin-left: 6px; letter-spacing: 0; }
+.pill { font: 500 10.5px var(--f-mono); letter-spacing: .07em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
 .pill.shipped { color: var(--shipped); background: var(--shipped-bg); }
 .pill.stopped { color: var(--stopped); background: var(--stopped-bg); }
 .pill.research { color: var(--research); background: var(--research-bg); }
-dl { margin: 0; display: grid; grid-template-columns: 7.5em 1fr; gap: 8px 16px; }
-dt { font: 500 12px var(--f-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding-top: 4px; }
-dd { margin: 0; min-width: 0; }
-.result dd { font-weight: 600; }
-.lesson { border-top: 1px dashed var(--line); padding-top: 10px; color: var(--muted); font-style: italic; }
-@media (max-width: 520px) { dl { grid-template-columns: 1fr; gap: 2px; } dd { margin-bottom: 8px; } }
+.case h4 { font-family: var(--f-display); font-weight: 700; font-size: 20px; line-height: 1.2; margin: 4px 0 0; text-wrap: balance; }
+.where { font: 500 12px var(--f-mono); color: var(--muted); }
+.steps { display: grid; gap: 8px; font-size: 15.5px; line-height: 1.5; }
+.steps p { margin: 0; }
+.steps b { font: 500 11px var(--f-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-right: 6px; }
+.result { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-weight: 600; font-size: 15.5px; line-height: 1.45; }
+.lesson { font-style: italic; color: var(--muted); font-size: 15px; }
+.case.wide { grid-column: 1 / -1; }
+.ideas { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; font-size: 15.5px; }
 
-.small-ideas { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 20px 24px; }
-.small-ideas h3 { font-family: var(--f-display); font-size: 20px; margin: 0 0 8px; }
-.small-ideas ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
-footer { font-family: var(--f-mono); font-size: 13px; color: var(--muted); display: grid; gap: 4px; }
-
-.timeline { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 20px 22px; display: grid; gap: 12px; }
-.timeline h2 { font-family: var(--f-display); font-size: 20px; margin: 0; }
-.tl-scroll { overflow-x: auto; }
-.tl { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); min-width: 600px; position: relative; padding-top: 18px; }
-.tl::before { content: ""; position: absolute; top: 24px; left: 0; right: 0; height: 2px; background: var(--line); }
-.yr { position: relative; display: grid; gap: 6px; padding-right: 10px; }
-.yr::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); position: absolute; top: 0; left: 0; }
-.yr .y { font-family: var(--f-display); font-weight: 800; font-size: 18px; margin-top: 18px; }
-.yr ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; line-height: 1.35; }
-.yr li.w::before { content: "work · "; font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
-.yr li.b::before { content: "built · "; font-family: var(--f-mono); font-size: 11px; color: var(--stopped); }
-.case a { color: var(--accent); }
+footer { border-top: 1px solid var(--line); padding-block: 28px 48px; color: var(--muted); font: 500 13px var(--f-mono); }
+footer .wrap { display: grid; gap: 6px; }
 [hidden] { display: none !important; }
+
+@media (max-width: 880px) {
+  .hero { grid-template-columns: 1fr; padding-block: 36px 28px; }
+  .story { grid-template-columns: 1fr; gap: 18px; }
+  .method { grid-template-columns: 1fr 1fr; }
+  .grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) { .wrap { padding-inline: 16px; } .method { grid-template-columns: 1fr; } .stat .n { font-size: 28px; } .case .big { font-size: 27px; } }
 </style>
-<style>body{margin:0}</style>
 </head>
 <body>
 
-<div class="wrap">
-  <header>
-    <div class="kicker">Casebook · Siddhant Goyal</div>
-    <h1>I go looking for the problem first, then build for it.</h1>
-    <div class="lede">
-      <p>I moved from India to Canada to study geomatics, a course that did not even exist back home, at a university nobody I knew had ever been to. My parents took a big risk paying for it. That gap became my first startup: a way for future students to talk to current ones before making the same leap. I built it before talking to enough students, and they would not pay. It taught me the habit I still use: look at what already exists, build a small version, test it with real people, then decide.</p>
-      <p>At work my teammates call me their personal human AI, or the ideas guy. I am who they come to when something is stuck or taking too long. I like messy operations because there is almost always a way to save time, save money or make money, and with AI I can build the fix myself instead of waiting on a tech team.</p>
-      <p>I do not see stopped projects as failures. They are paused until a better idea brings them back. And I am less busy than it looks. I have done a full-time master's, a full-time job and university teaching at the same time, while building something on the side, and I still play cricket, volleyball and squash, go to the gym, and fly as a private pilot. I do all of it because I enjoy it.</p>
-    </div>
-    <div class="meta">
-      <span class="sel">siddhantgoyal402@gmail.com</span>
-      <a href="https://www.linkedin.com/in/siddhant-goyal" target="_blank" rel="noopener">linkedin.com/in/siddhant-goyal</a>
-      <span>Open to relocating</span>
-    </div>
-  </header>
+<div class="top"><div class="wrap">
+  <div class="brand"><span class="mark">SG</span>Siddhant Goyal</div>
+  <div class="contact"><span class="sel">siddhantgoyal402@gmail.com</span><a href="https://www.linkedin.com/in/siddhant-goyal" target="_blank" rel="noopener">LinkedIn</a><a href="https://thecarbzaar.com" target="_blank" rel="noopener">thecarbzaar.com</a><a href="https://drive-audit.vercel.app/" target="_blank" rel="noopener">Drive</a><span>Waterloo, Canada · open to relocating</span></div>
+</div></div>
 
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="kicker">Casebook</div>
+      <h1>I go looking for the problem first, then build for it.</h1>
+      <p class="sub">Business analyst who turns slow, manual, high-volume work into systems. <b>Five fixes shipped at work and eight ventures tested on my own,</b> each written up below: the problem, how I found it, what I did, and what happened.</p>
+    </div>
+    <div class="panel" aria-label="Results at a glance">
+      <div class="lbl">Results at a glance</div>
+      <div class="stat"><span class="n">40→5</span><span class="t">minutes per payment dispute after my AI tool</span></div>
+      <div class="stat"><span class="n">55+ h</span><span class="t">of team time freed every week</span></div>
+      <div class="stat"><span class="n">+18%</span><span class="t">ancillary revenue per passenger</span></div>
+      <div class="stat"><span class="n">−30%</span><span class="t">chargebacks after finding the cause</span></div>
+      <div class="stat"><span class="n">500+</span><span class="t">deals linked to their full revenue</span></div>
+      <div class="stat"><span class="n">−10%</span><span class="t">fuel cost on targeted routes</span></div>
+    </div>
+  </section>
 
-  <section class="timeline" aria-label="Timeline">
-    <h2>Building alongside the day job</h2>
+  <section class="block" aria-labelledby="about-h">
+    <div class="sec-head"><h2 id="about-h">About me</h2></div>
+    <div class="story">
+      <div><h3>Where it started</h3><p>I moved from India to Canada to study geomatics, a course that did not exist back home, at a university nobody I knew had been to. My parents took a big risk paying for it. That gap became my first startup: a way for future students to talk to current ones. I built it before talking to enough students, and they would not pay.</p></div>
+      <div><h3>At work</h3><p>My teammates call me their personal human AI, or the ideas guy. I am who they come to when something is stuck or taking too long. I like messy operations because there is almost always a way to save time, save money or make money, and with AI I can build the fix myself instead of waiting on a tech team.</p></div>
+      <div><h3>Outside work</h3><p>I do not see stopped projects as failures. They are paused until a better idea brings them back. I have done a full-time master's, a full-time job and university teaching at once while building on the side, and I still play cricket, volleyball and squash, go to the gym, and fly as a private pilot. I do it because I enjoy it.</p></div>
+    </div>
+    <div class="method" aria-label="How I work">
+      <div>Find where people lose the most time or money, usually a queue of cases nobody has measured.</div>
+      <div>Measure it before touching it, so the result is real and not a feeling.</div>
+      <div>Build the smallest thing that removes the manual work, then hand it to the team.</div>
+      <div>On my own ideas, set a test with a pass mark and stop when it fails.</div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="tl-h">
+    <div class="sec-head"><h2 id="tl-h">Building alongside the day job</h2><p class="sec-note">What I did at work, and what I built on my own time.</p></div>
     <div class="tl-scroll"><div class="tl">
-      <div class="yr"><div class="y">2022</div><ul><li class="w">Super: traced the chargeback spike</li><li class="b">Muide, 500+ students surveyed</li></ul></div>
-      <div class="yr"><div class="y">2023</div><ul><li class="w">Joined Flair Airlines</li><li class="b">Muide paused</li></ul></div>
-      <div class="yr"><div class="y">2024</div><ul><li class="w">Flair: disputes tool, pricing, fuel</li><li class="w">Taught 600+ students</li><li class="b">Started research master's</li></ul></div>
-      <div class="yr"><div class="y">2025</div><ul><li class="w">Joined OpenText</li><li class="b">Thesis: 1,289 practices coded</li></ul></div>
-      <div class="yr"><div class="y">2026</div><ul><li class="b">MeshRoute</li><li class="b">The Car Bzaar</li><li class="b">Finfluencer Scorecard</li><li class="b">Job Match Pipeline</li><li class="w">Master's completed</li></ul></div>
+      <div class="yr"><div class="y">2022</div><ul><li><span class="tag w">Work</span>Super: found the chargeback cause</li><li><span class="tag b">Built</span>Muide, 500+ students surveyed</li></ul></div>
+      <div class="yr"><div class="y">2023</div><ul><li><span class="tag w">Work</span>Joined Flair Airlines</li><li><span class="tag b">Built</span>Muide paused</li></ul></div>
+      <div class="yr"><div class="y">2024</div><ul><li><span class="tag w">Work</span>Disputes tool, pricing, fuel</li><li><span class="tag w">Work</span>Taught 600+ students</li><li><span class="tag b">Built</span>Started research master's</li></ul></div>
+      <div class="yr"><div class="y">2025</div><ul><li><span class="tag w">Work</span>Joined OpenText</li><li><span class="tag b">Built</span>Thesis: 1,289 practices coded</li></ul></div>
+      <div class="yr"><div class="y">2026</div><ul><li><span class="tag b">Built</span>MeshRoute</li><li><span class="tag b">Built</span>The Car Bzaar</li><li><span class="tag b">Built</span>Finfluencer Scorecard</li><li><span class="tag b">Built</span>Job Match Pipeline</li><li><span class="tag w">Work</span>Master's completed</li></ul></div>
     </div></div>
   </section>
 
-  <section class="pattern" aria-label="How I work">
-    <h2>How I work</h2>
-    <ol>
-      <li>Find where people lose the most time or money, usually in a queue of cases nobody has measured.</li>
-      <li>Measure it before touching it, so the result is real and not a feeling.</li>
-      <li>Build the smallest thing that removes the manual work, then hand it to the team.</li>
-      <li>On my own ideas, set a test with a clear pass mark and stop when it fails.</li>
-    </ol>
-    <div class="tally"><span><b id="n-ship">0</b>shipped at work</span><span><b id="n-stop">0</b>ventures tested and stopped</span><span><b id="n-res">0</b>research and builds</span></div>
-  </section>
+  <section class="block" aria-labelledby="cases-h">
+    <div class="sec-head"><h2 id="cases-h">The cases</h2>
+      <div class="filters" role="group" aria-label="Filter cases">
+        <button class="chip" data-f="all" aria-pressed="true">All</button>
+        <button class="chip" data-f="shipped" aria-pressed="false">Shipped at work</button>
+        <button class="chip" data-f="stopped" aria-pressed="false">Tested and stopped</button>
+        <button class="chip" data-f="research" aria-pressed="false">Research and builds</button>
+      </div>
+    </div>
 
-  <div class="filters" role="group" aria-label="Filter cases">
-    <button class="chip" data-f="all" aria-pressed="true">All cases</button>
-    <button class="chip" data-f="shipped" aria-pressed="false">Shipped at work</button>
-    <button class="chip" data-f="stopped" aria-pressed="false">Tested and stopped</button>
-    <button class="chip" data-f="research" aria-pressed="false">Research and builds</button>
-  </div>
+    <div class="group" data-g="shipped">
+      <div class="group-h"><h3>Shipped at work</h3><span>Problems I found inside companies and fixed.</span></div>
+      <div class="grid">
+        <article class="case wide">
+          <div class="metric"><span class="big">40 → 5 min<small>per dispute</small></span><span class="pill shipped">Shipped</span></div>
+          <h4>Payment disputes were eating a team's week</h4>
+          <div class="where">Flair Airlines · Data Analyst · 2023 to 2025</div>
+          <div class="steps">
+            <p><b>Problem</b>A team of 3 to 4 people handled 100+ chargeback cases a week at about 40 minutes each, mostly gathering the same evidence again and again.</p>
+            <p><b>How I saw it</b>I timed the work. The judgement part of each case was short. The collecting was the cost.</p>
+            <p><b>What I did</b>Built an AI tool that pulls the evidence for each dispute together and drafts the case, so the analyst reviews and decides.</p>
+          </div>
+          <div class="result">Each case went from 40 minutes to 5, freeing over 55 hours a week to fight the disputes where the airline was not at fault.</div>
+        </article>
+        <article class="case">
+          <div class="metric"><span class="big">−30%<small>chargebacks</small></span><span class="pill shipped">Shipped</span></div>
+          <h4>Chargebacks kept rising and nobody knew why</h4>
+          <div class="where">Super · Business Operations Intern · 2022</div>
+          <div class="steps">
+            <p><b>How I saw it</b>Split chargebacks by each outsourced call-centre provider instead of looking at the total. One provider stood out.</p>
+            <p><b>What I did</b>Took the evidence to the team, which removed the provider, then built staffing models in R.</p>
+          </div>
+          <div class="result">Chargebacks fell 30%. Agent costs fell 15%.</div>
+        </article>
+        <article class="case">
+          <div class="metric"><span class="big">500+<small>deals linked</small></span><span class="pill shipped">Shipped</span></div>
+          <h4>Sales leaders could not see what a deal was worth</h4>
+          <div class="where">OpenText · Senior Business Analyst · 2025 to now</div>
+          <div class="steps">
+            <p><b>Problem</b>Services revenue sat apart from the software deals that created it, and a manual SAP versus Salesforce check took 2 to 3 days a month.</p>
+            <p><b>What I did</b>Created the first method to link the two, wrote Python checks that flag mismatches automatically, and built the Power BI reporting.</p>
+          </div>
+          <div class="result">500+ deals in one view, the monthly check automated, dashboards used by 20+ people.</div>
+        </article>
+        <article class="case">
+          <div class="metric"><span class="big">−10%<small>fuel cost</small></span><span class="pill shipped">Shipped</span></div>
+          <h4>Fuel was burning before the aircraft moved</h4>
+          <div class="where">Flair Airlines · Data Analyst</div>
+          <div class="steps">
+            <p><b>How I saw it</b>Broke ground fuel into taxi time, auxiliary power use and gate time before ground power. Calculated burn from booked and boarded load factors, because no-shows changed the answer.</p>
+            <p><b>What I did</b>Recommended changes to gate and ground procedures on the worst routes.</p>
+          </div>
+          <div class="result">Helped cut fuel costs by 10% on targeted routes.</div>
+        </article>
+        <article class="case">
+          <div class="metric"><span class="big">+18%<small>revenue per passenger</small></span><span class="pill shipped">Shipped</span></div>
+          <h4>Paid extras were underpriced</h4>
+          <div class="where">Flair Airlines · Data Analyst</div>
+          <div class="steps">
+            <p><b>How I saw it</b>Measured revenue per passenger, not totals, so passenger growth could not hide weak pricing.</p>
+            <p><b>What I did</b>Led pricing analysis and A/B tests on bags and seats, and automated financial reconciliation.</p>
+          </div>
+          <div class="result">Ancillary revenue per passenger up 18%. Reconciliation time down 70%, backlog down 60%.</div>
+        </article>
+      </div>
+    </div>
 
-  <section class="cases" id="cases">
+    <div class="group" data-g="stopped">
+      <div class="group-h"><h3>Tested and stopped</h3><span>My own ventures. Each had a test, and each ended on evidence.</span></div>
+      <div class="grid">
+        <article class="case wide">
+          <div class="metric"><span class="big">5 deposits<small>the pass mark I set</small></span><span class="pill stopped">Tested, paused</span></div>
+          <h4>The Car Bzaar: a one-day used car market</h4>
+          <div class="where">Co-founder · Kitchener-Waterloo · 2026 · <a href="https://thecarbzaar.com" target="_blank" rel="noopener">thecarbzaar.com</a></div>
+          <div class="steps">
+            <p><b>Problem</b>Buying a used car from a dealer is slow and opaque. One event could put many dealers and buyers in the same room.</p>
+            <p><b>What I did</b>Registered the company, cleared the model with the provincial regulator and launched the site. Built a 100-spot budget with break-even at 33 spots, and set the test: 5 paid dealer deposits before spending on launch. Got strong dealer interest and the first spot booked.</p>
+          </div>
+          <div class="result">The furthest any venture of mine has gone. Most dealers liked it but would not commit money, so we paused before launch.</div>
+          <div class="lesson">Interest is not demand. A deposit is.</div>
+        </article>
+        <article class="case wide">
+          <div class="metric"><span class="big">177<small>drivers benchmarked from one Reddit post</small></span><span class="pill stopped">Live, paused</span></div>
+          <h4>Drive: are Ontario drivers overpaying for car insurance?</h4>
+          <div class="where">Founder · Ontario · <a href="https://drive-audit.vercel.app/" target="_blank" rel="noopener">drive-audit.vercel.app</a></div>
+          <div class="steps">
+            <p><b>Problem</b>Car insurance in Ontario is expensive, and most people never check whether their deductibles, discounts and coverage fit them.</p>
+            <p><b>What I did</b>Launched a free benchmark that shows drivers where they stand, plus a detailed audit: upload your policy declaration page and get a review within 48 hours covering deductibles, coverage gaps, missed discounts, premium competitiveness and telematics. Shared it with one link in one Reddit post.</p>
+          </div>
+          <div class="result">177 drivers completed the benchmark, and the number is still climbing. 7 uploaded their full policy for an audit. The audits did not find enough savings to make people pay, so I paused before building the monitoring product.</div>
+          <div class="lesson">Curiosity got 177 people to answer. Only real savings would get them to pay.</div>
+        </article>
+        <article class="case">
+          <div class="metric"><span class="big">Bluetooth<small>the constraint</small></span><span class="pill stopped">Tested, stopped</span></div>
+          <h4>MeshRoute: navigation without the internet</h4>
+          <div class="where">Founder · 2026</div>
+          <div class="steps">
+            <p><b>Problem</b>Online maps are slow, need a connection, and send everyone down the same road, creating new traffic.</p>
+            <p><b>What I did</b>Built a working React Native prototype with OSRM routing that shares traffic between phones over Bluetooth.</p>
+          </div>
+          <div class="result">Stopped when Bluetooth could not carry the data far or fast enough.</div>
+          <div class="lesson">Check the data the product depends on before building the product.</div>
+        </article>
+        <article class="case">
+          <div class="metric"><span class="big">500+<small>students surveyed</small></span><span class="pill stopped">Tested, paused</span></div>
+          <h4>Muide: talk to a real student before moving abroad</h4>
+          <div class="where">Co-founder and CEO · 2022 to 2023</div>
+          <div class="steps">
+            <p><b>Problem</b>Future international students make a huge bet with almost no first-hand information.</p>
+            <p><b>What I did</b>Started a platform where current students earn by answering future ones, then built the business plan and revenue model.</p>
+          </div>
+          <div class="result">Students wanted the answers but would not pay to talk.</div>
+          <div class="lesson">My first venture, and why every later one starts with a test.</div>
+        </article>
+        
+        <article class="case">
+          <div class="metric"><span class="big">4 more<small>smaller ideas</small></span><span class="pill stopped">Dropped early</span></div>
+          <ul class="ideas">
+            <li>A carbon credit marketplace, built to MVP.</li>
+            <li>Safety compliance software for flight schools, with an outreach list from Transport Canada records.</li>
+            <li>A car repair bidding marketplace: shops are short of technicians, not customers.</li>
+            <li>A subscription for regular restaurant-goers: MealPal tried it and failed.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
 
-    <article class="case" data-k="shipped">
-      <div class="case-head"><h3>Payment disputes were eating a team's week</h3><span class="pill shipped">Shipped</span></div>
-      <div class="where">Flair Airlines · Data Analyst · 2023 to 2025</div>
-      <dl>
-        <dt>Problem</dt><dd>A team of 3 to 4 people handled 100+ chargeback cases a week, at about 40 minutes each. Most of that time went into gathering the same evidence again and again.</dd>
-        <dt>How I saw it</dt><dd>I timed the work. The judgement part of each case was short. The collecting was the cost.</dd>
-        <dt>What I did</dt><dd>Built an AI tool that pulls the evidence for each dispute together and drafts the case, so the analyst reviews and decides.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Each case went from 40 minutes to 5. Over 55 hours a week freed to fight the disputes where the airline was not at fault.</dd></dl>
-    </article>
-
-    <article class="case" data-k="shipped">
-      <div class="case-head"><h3>Chargebacks kept rising and nobody knew why</h3><span class="pill shipped">Shipped</span></div>
-      <div class="where">Super · Business Operations Intern · 2022</div>
-      <dl>
-        <dt>Problem</dt><dd>Chargebacks were climbing across the business.</dd>
-        <dt>How I saw it</dt><dd>I split the chargeback data by every outsourced call-centre provider instead of looking at the total. One provider stood out.</dd>
-        <dt>What I did</dt><dd>Took the evidence to the team, which removed the provider. Then built staffing models in R to size agent teams properly.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Chargebacks fell by 30%. Agent costs fell by 15%.</dd></dl>
-    </article>
-
-    <article class="case" data-k="shipped">
-      <div class="case-head"><h3>Sales leaders could not see what a deal was really worth</h3><span class="pill shipped">Shipped</span></div>
-      <div class="where">OpenText · Senior Business Analyst · 2025 to now</div>
-      <dl>
-        <dt>Problem</dt><dd>Services revenue sat apart from the SAP software deals that created it, so a deal looked smaller than it was. Separately, someone spent 2 to 3 days a month checking SAP against Salesforce by hand and still missed mismatches.</dd>
-        <dt>How I saw it</dt><dd>The same deal told two different stories depending on which system you opened.</dd>
-        <dt>What I did</dt><dd>Created the first method to link services revenue to the deals behind it. Wrote Python scripts that compare SAP and Salesforce records and flag errors automatically. Built the Power BI reporting on top.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>500+ deals linked and viewable in one place. The monthly manual check replaced by an automatic one. Dashboards used by 20+ people.</dd></dl>
-    </article>
-
-    <article class="case" data-k="shipped">
-      <div class="case-head"><h3>Fuel was burning before the aircraft even moved</h3><span class="pill shipped">Shipped</span></div>
-      <div class="where">Flair Airlines · Data Analyst</div>
-      <dl>
-        <dt>Problem</dt><dd>Fuel is an airline's biggest controllable cost, and part of it was burned on the ground.</dd>
-        <dt>How I saw it</dt><dd>I broke ground fuel into taxi time, auxiliary power unit use and the minutes at the gate before ground power was connected. I calculated burn from both booked and boarded load factors, because no-shows changed the answer.</dd>
-        <dt>What I did</dt><dd>Recommended changes to gate and ground procedures on the worst routes.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Helped cut fuel costs by 10% on targeted routes.</dd></dl>
-    </article>
-
-    <article class="case" data-k="shipped">
-      <div class="case-head"><h3>Revenue per passenger left on the table</h3><span class="pill shipped">Shipped</span></div>
-      <div class="where">Flair Airlines · Data Analyst</div>
-      <dl>
-        <dt>Problem</dt><dd>At a low-cost airline, paid extras like bags and seats are where the margin is.</dd>
-        <dt>How I saw it</dt><dd>I measured revenue per passenger rather than totals, so growth in passengers could not hide weak pricing.</dd>
-        <dt>What I did</dt><dd>Led pricing analysis and A/B tests on paid extras. Also automated financial reconciliation with Power Automate, SQL and Power BI.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Ancillary revenue per passenger up 18%. Manual reconciliation time down 70% and the backlog down 60%.</dd></dl>
-    </article>
-
-    <article class="case" data-k="stopped">
-      <div class="case-head"><h3>The Car Bzaar: a one-day used car market</h3><span class="pill stopped">Tested, stopped</span></div>
-      <div class="where">Co-founder · Kitchener-Waterloo · 2026 · <a href="https://thecarbzaar.com" target="_blank" rel="noopener">thecarbzaar.com</a></div>
-      <dl>
-        <dt>Problem</dt><dd>Buying a used car from a dealer is slow and opaque. A single-day event could put many dealers and buyers in one room.</dd>
-        <dt>What I did</dt><dd>Registered the company, cleared the model with the provincial regulator and launched the website. Built a 100-spot budget with break-even at 33 spots, and set a clear test: 5 paid dealer deposits before spending on launch. Got strong dealer interest and the first spot booked.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>The furthest any of my ventures has gone. Most dealers liked it but would not commit money, so the test failed and we paused before launch.</dd></dl>
-      <div class="lesson">Interest is not demand. A deposit is.</div>
-    </article>
-
-    <article class="case" data-k="stopped">
-      <div class="case-head"><h3>Drive: lowering car insurance payments</h3><span class="pill stopped">Tested, stopped</span></div>
-      <div class="where">Founder · Ontario</div>
-      <dl>
-        <dt>Problem</dt><dd>Car insurance in Ontario is expensive, and most people never check whether they could pay less.</dd>
-        <dt>What I did</dt><dd>Explored a tool that would watch a driver's finances and policy and find savings automatically.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Stopped. I could not find a reliable way to actually reduce the payment, and without that there was no product.</dd></dl>
-      <div class="lesson">If the core promise cannot be delivered, the rest does not matter.</div>
-    </article>
-
-    <article class="case" data-k="stopped">
-      <div class="case-head"><h3>MeshRoute: navigation that works offline</h3><span class="pill stopped">Tested, stopped</span></div>
-      <div class="where">Founder · 2026</div>
-      <dl>
-        <dt>Problem</dt><dd>Online navigation apps can be slow, depend on the internet, and send everyone down the same route, creating new traffic of their own.</dd>
-        <dt>What I did</dt><dd>Built a working React Native prototype with OSRM routing that works offline, sharing traffic between phones over Bluetooth (BLE) instead of the internet.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Stopped when testing showed Bluetooth could not carry traffic data far enough or fast enough to be useful.</dd></dl>
-      <div class="lesson">Check the data the product depends on before building the product.</div>
-    </article>
-
-    <article class="case" data-k="stopped">
-      <div class="case-head"><h3>Muide: talk to a real student before you move abroad</h3><span class="pill stopped">Tested, paused</span></div>
-      <div class="where">Co-founder and CEO · 2022 to 2023</div>
-      <dl>
-        <dt>Problem</dt><dd>I came to Canada knowing nobody who had studied abroad, for a course India did not offer. Future students make that bet with almost no first-hand information.</dd>
-        <dt>What I did</dt><dd>Started building a platform where current students earn by answering future students, then surveyed 500+ students and built the business plan and revenue model.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Paused. Students wanted the answers but would not pay to talk. I had built before proving the problem.</dd></dl>
-      <div class="lesson">My first venture, and the reason every later one starts with a test.</div>
-    </article>
-
-    <article class="case" data-k="research">
-      <div class="case-head"><h3>Do finance influencers' stock picks beat the market?</h3><span class="pill research">Built</span></div>
-      <div class="where">Finfluencer Scorecard · Python, Claude API, Whisper · 2026</div>
-      <dl>
-        <dt>Problem</dt><dd>Millions of people act on stock picks from YouTube, and nobody scores them.</dd>
-        <dt>How I did it</dt><dd>When YouTube restricted captions, I switched to a local speech-to-text model. Turned 2,175 videos (about 700 hours of audio) from 10 channels into 474 verified buy and sell calls, with a second model check that rejected nearly half the extractions. Priced every call at the next market open so no result used hindsight. Cut API cost by about 60% along the way.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Two channels looked like winners until I found their picks were correlated. Resampling by stock and by month removed both. No channel measurably beat the market; one trailed it by 10.1% over 3 months.</dd></dl>
-      <div class="lesson">The interesting result was the one that disappeared under a fair test.</div>
-    </article>
-
-    <article class="case" data-k="research">
-      <div class="case-head"><h3>Applying for jobs without inflating anything</h3><span class="pill research">Built</span></div>
-      <div class="where">Job Match Pipeline · Python, Claude API · 2026</div>
-      <dl>
-        <dt>Problem</dt><dd>Tailoring a CV for every job is slow, and AI tools happily invent numbers.</dd>
-        <dt>What I did</dt><dd>Built a pipeline that scores each posting against a verified bank of my experience, tailors the CV, and blocks any number or tool the source does not back, with automated tests on every check.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>It is how my current applications are built, including the one that brought you here.</dd></dl>
-    </article>
-
-    <article class="case" data-k="research">
-      <div class="case-head"><h3>Does sustainability disclosure pay at low-cost airlines?</h3><span class="pill research">Research</span></div>
-      <div class="where">Research master's thesis · University of Waterloo · 2026</div>
-      <dl>
-        <dt>Problem</dt><dd>Airlines publish more sustainability reporting every year. Nobody had tested whether it relates to profit for low-cost carriers.</dd>
-        <dt>What I did</dt><dd>Coded 1,289 disclosed practices from the reports of 20 low-cost airlines (2015 to 2024) into an index, then ran panel regressions in R on 128 airline-years.</dd>
-      </dl>
-      <dl class="result"><dt>Result</dt><dd>Overall disclosure had no link to returns. Environmental disclosure was linked to higher return on assets. The negative social link came from airlines in financial distress.</dd></dl>
-    </article>
-
-    <div class="small-ideas" data-k="stopped">
-      <h3>Smaller ideas, also tested and dropped</h3>
-      <ul>
-        <li>A carbon credit marketplace, built to MVP.</li>
-        <li>Safety compliance software for flight schools, with an outreach list built from Transport Canada records.</li>
-        <li>A car repair bidding marketplace, dropped once research showed shops are short of technicians, not customers.</li>
-        <li>A usage-capped subscription for the restaurants people visit every week, dropped after finding MealPal had tried the same model and failed.</li>
-      </ul>
+    <div class="group" data-g="research">
+      <div class="group-h"><h3>Research and builds</h3><span>Questions I wanted a real answer to.</span></div>
+      <div class="grid">
+        <article class="case wide">
+          <div class="metric"><span class="big">2,175 → 474<small>videos to verified stock calls</small></span><span class="pill research">Built</span></div>
+          <h4>Do finance influencers' stock picks beat the market?</h4>
+          <div class="where">Finfluencer Scorecard · Python, Claude API, Whisper · 2026</div>
+          <div class="steps">
+            <p><b>How I did it</b>When YouTube restricted captions, I switched to local speech-to-text. Turned about 700 hours of audio from 10 channels into verified buy and sell calls, with a second model check that rejected nearly half the extractions. Priced every call at the next market open so nothing used hindsight, and cut API cost by about 60%.</p>
+          </div>
+          <div class="result">Two channels looked like winners until I found their picks were correlated; resampling removed both. No channel measurably beat the market, and one trailed it by 10.1% over 3 months.</div>
+          <div class="lesson">The interesting result was the one that disappeared under a fair test.</div>
+        </article>
+        <article class="case">
+          <div class="metric"><span class="big">20 airlines<small>1,289 practices coded</small></span><span class="pill research">Research</span></div>
+          <h4>Does sustainability disclosure pay at low-cost airlines?</h4>
+          <div class="where">Research master's thesis · University of Waterloo · 2026</div>
+          <div class="steps"><p><b>What I did</b>Coded disclosed practices from 20 low-cost airlines (2015 to 2024) into an index and ran panel regressions in R on 128 airline-years.</p></div>
+          <div class="result">Overall disclosure had no link to returns; environmental disclosure was linked to higher return on assets.</div>
+        </article>
+        <article class="case">
+          <div class="metric"><span class="big">0<small>invented claims allowed</small></span><span class="pill research">Built</span></div>
+          <h4>Applying for jobs without inflating anything</h4>
+          <div class="where">Job Match Pipeline · Python, Claude API · 2026</div>
+          <div class="steps"><p><b>What I did</b>Built a pipeline that scores each posting against a verified bank of my experience, tailors the CV, and blocks any number or tool the source does not back.</p></div>
+          <div class="result">It is how my current applications are built, with automated tests on every check.</div>
+        </article>
+      </div>
     </div>
   </section>
+</main>
 
-  <footer>
-    <span>Also: private pilot licence · taught business analytics to 600+ University of Waterloo students (4.2/5) · English and Hindi</span>
-    <span>Every number on this page is one I can walk through in detail.</span>
-  </footer>
-</div>
+<footer><div class="wrap">
+  <div>Also: private pilot licence · taught business analytics to 600+ University of Waterloo students (4.2/5) · English and Hindi</div>
+  <div>Every number on this page is one I can walk through in detail.</div>
+</div></footer>
 
 <script>
-const cases = [...document.querySelectorAll('#cases [data-k]')];
-const count = k => document.querySelectorAll(`#cases article[data-k="${k}"]`).length;
-document.getElementById('n-ship').textContent = count('shipped');
-document.getElementById('n-stop').textContent = count('stopped') + document.querySelectorAll('.small-ideas li').length;
-document.getElementById('n-res').textContent = count('research');
 document.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click', () => {
   const f = chip.dataset.f;
   document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
-  cases.forEach(el => { el.hidden = !(f === 'all' || el.dataset.k === f); });
+  document.querySelectorAll('.group').forEach(g => { g.hidden = !(f === 'all' || g.dataset.g === f); });
 }));
 </script>
 </body>
