@@ -127,7 +127,7 @@ footer .wrap { display: grid; gap: 6px; }
     <div>
       <div class="kicker">Casebook</div>
       <h1>I go looking for the problem first, then build for it.</h1>
-      <p class="sub">Business analyst who turns slow, manual, high-volume work into systems. <b>Five fixes shipped at work and eight ventures tested on my own,</b> each written up below: the problem, how I found it, what I did, and what happened.</p>
+      <p class="sub">Business analyst who turns slow, manual, high-volume work into systems. <b>Six fixes shipped at work, and four ventures and four smaller ideas tested on my own,</b> each written up below: the problem, how I found it, what I did, and what happened.</p>
     </div>
     <div class="panel" aria-label="Results at a glance">
       <div class="lbl">Results at a glance</div>
@@ -135,7 +135,7 @@ footer .wrap { display: grid; gap: 6px; }
       <div class="stat"><span class="n">55+ h</span><span class="t">of team time freed every week</span></div>
       <div class="stat"><span class="n">+18%</span><span class="t">ancillary revenue per passenger</span></div>
       <div class="stat"><span class="n">−30%</span><span class="t">chargebacks after finding the cause</span></div>
-      <div class="stat"><span class="n">500+</span><span class="t">deals linked to their full revenue</span></div>
+      <div class="stat"><span class="n">−70%</span><span class="t">manual reconciliation work after automating it</span></div>
       <div class="stat"><span class="n">−10%</span><span class="t">fuel cost on targeted routes</span></div>
     </div>
   </section>
@@ -162,7 +162,7 @@ footer .wrap { display: grid; gap: 6px; }
       <div class="yr"><div class="y">2023</div><ul><li><span class="tag w">Work</span>Joined Flair Airlines</li><li><span class="tag b">Built</span>Muide paused</li></ul></div>
       <div class="yr"><div class="y">2024</div><ul><li><span class="tag w">Work</span>Disputes tool, pricing, fuel</li><li><span class="tag w">Work</span>Taught 600+ students</li><li><span class="tag b">Built</span>Started research master's</li></ul></div>
       <div class="yr"><div class="y">2025</div><ul><li><span class="tag w">Work</span>Joined OpenText</li><li><span class="tag b">Built</span>Thesis: 1,289 practices coded</li></ul></div>
-      <div class="yr"><div class="y">2026</div><ul><li><span class="tag b">Built</span>MeshRoute</li><li><span class="tag b">Built</span>The Car Bzaar</li><li><span class="tag b">Built</span>Finfluencer Scorecard</li><li><span class="tag b">Built</span>Job Match Pipeline</li><li><span class="tag w">Work</span>Master's completed</li></ul></div>
+      <div class="yr"><div class="y">2026</div><ul><li><span class="tag b">Built</span>MeshRoute</li><li><span class="tag b">Built</span>The Car Bzaar</li><li><span class="tag b">Built</span>Drive</li><li><span class="tag b">Built</span>Finfluencer Scorecard</li><li><span class="tag w">Work</span>Travel app built, in testing</li><li><span class="tag w">Work</span>Master's completed</li></ul></div>
     </div></div>
   </section>
 
@@ -180,13 +180,25 @@ footer .wrap { display: grid; gap: 6px; }
       <div class="group-h"><h3>Shipped at work</h3><span>Problems I found inside companies and fixed.</span></div>
       <div class="grid">
         <article class="case wide">
+          <div class="metric"><span class="big">Idea → in use<small>built as sole developer</small></span><span class="pill shipped">In testing</span></div>
+          <h4>Travel approvals ran on informal sign-offs</h4>
+          <div class="where">OpenText · Senior Business Analyst · 2025 to now</div>
+          <div class="steps">
+            <p><b>Problem</b>Trips in the SAP organization were approved informally, and managers could not see their team's travel budgets before a trip was booked in Concur.</p>
+            <p><b>How I saw it</b>Instead of writing a proposal, I built an HTML prototype with Claude to show the fix, took it to the VP, then presented it to multiple senior leaders.</p>
+            <p><b>What I did</b>They approved the build and its budget. I built the app myself, learning the stack on the job (Vue.js, Node.js, PostgreSQL, Docker), with AI policy checks. I wrote the requirements, tested it with users and changed it after each demo.</p>
+          </div>
+          <div class="result">Now in testing, with employees already using it to track their travel expenses. 70 to 80 employees at launch.</div>
+          <div class="lesson">A working prototype gets a yes faster than a slide.</div>
+        </article>
+        <article class="case wide">
           <div class="metric"><span class="big">40 → 5 min<small>per dispute</small></span><span class="pill shipped">Shipped</span></div>
           <h4>Payment disputes were eating a team's week</h4>
           <div class="where">Flair Airlines · Data Analyst · 2023 to 2025</div>
           <div class="steps">
             <p><b>Problem</b>A team of 3 to 4 people handled 100+ chargeback cases a week at about 40 minutes each, mostly gathering the same evidence again and again.</p>
             <p><b>How I saw it</b>I timed the work. The judgement part of each case was short. The collecting was the cost.</p>
-            <p><b>What I did</b>Built an AI tool that pulls the evidence for each dispute together and drafts the case, so the analyst reviews and decides.</p>
+            <p><b>What I did</b>Built an AI web app that shows each new chargeback and, in one click, pulls everything known about that customer from NAVBLUE, Zendesk, booking and call centre systems into one place to file the dispute. Designed its data schemas so the data engineering team could maintain it, and changed it after each demo with the analysts.</p>
           </div>
           <div class="result">Each case went from 40 minutes to 5, freeing over 55 hours a week to fight the disputes where the airline was not at fault.</div>
         </article>
@@ -226,7 +238,7 @@ footer .wrap { display: grid; gap: 6px; }
           <div class="where">Flair Airlines · Data Analyst</div>
           <div class="steps">
             <p><b>How I saw it</b>Measured revenue per passenger, not totals, so passenger growth could not hide weak pricing.</p>
-            <p><b>What I did</b>Led pricing analysis and A/B tests on bags and seats, and automated financial reconciliation.</p>
+            <p><b>What I did</b>Led pricing analysis and A/B tests on bags, seats and bundles. Measured each test in Google Analytics, checked significance in Optimizely, and read the results through drop-off between booking steps. Also automated financial reconciliation with Power Automate, SQL and Power BI.</p>
           </div>
           <div class="result">Ancillary revenue per passenger up 18%. Reconciliation time down 70%, backlog down 60%.</div>
         </article>
@@ -248,15 +260,15 @@ footer .wrap { display: grid; gap: 6px; }
           <div class="lesson">Interest is not demand. A deposit is.</div>
         </article>
         <article class="case wide">
-          <div class="metric"><span class="big">177<small>drivers benchmarked from one Reddit post</small></span><span class="pill stopped">Live, paused</span></div>
+          <div class="metric"><span class="big">184<small>drivers benchmarked from one Reddit post</small></span><span class="pill stopped">Live, paused</span></div>
           <h4>Drive: are Ontario drivers overpaying for car insurance?</h4>
           <div class="where">Founder · Ontario · <a href="https://drive-audit.vercel.app/" target="_blank" rel="noopener">drive-audit.vercel.app</a></div>
           <div class="steps">
             <p><b>Problem</b>Car insurance in Ontario is expensive, and most people never check whether their deductibles, discounts and coverage fit them.</p>
             <p><b>What I did</b>Launched a free benchmark that shows drivers where they stand, plus a detailed audit: upload your policy declaration page and get a review within 48 hours covering deductibles, coverage gaps, missed discounts, premium competitiveness and telematics. Shared it with one link in one Reddit post.</p>
           </div>
-          <div class="result">177 drivers completed the benchmark, and the number is still climbing. 7 uploaded their full policy for an audit. The audits did not find enough savings to make people pay, so I paused before building the monitoring product.</div>
-          <div class="lesson">Curiosity got 177 people to answer. Only real savings would get them to pay.</div>
+          <div class="result">184 drivers completed the benchmark, and the number is still climbing. 7 uploaded their full policy for an audit. The audits did not find enough savings to make people pay, so I paused before building the monitoring product.</div>
+          <div class="lesson">Curiosity got 184 people to answer. Only real savings would get them to pay.</div>
         </article>
         <article class="case">
           <div class="metric"><span class="big">Bluetooth<small>the constraint</small></span><span class="pill stopped">Tested, stopped</span></div>
@@ -306,19 +318,12 @@ footer .wrap { display: grid; gap: 6px; }
           <div class="result">Two channels looked like winners until I found their picks were correlated; resampling removed both. No channel measurably beat the market, and one trailed it by 10.1% over 3 months.</div>
           <div class="lesson">The interesting result was the one that disappeared under a fair test.</div>
         </article>
-        <article class="case">
+        <article class="case wide">
           <div class="metric"><span class="big">20 airlines<small>1,289 practices coded</small></span><span class="pill research">Research</span></div>
           <h4>Does sustainability disclosure pay at low-cost airlines?</h4>
           <div class="where">Research master's thesis · University of Waterloo · 2026</div>
           <div class="steps"><p><b>What I did</b>Coded disclosed practices from 20 low-cost airlines (2015 to 2024) into an index and ran panel regressions in R on 128 airline-years.</p></div>
           <div class="result">Overall disclosure had no link to returns; environmental disclosure was linked to higher return on assets.</div>
-        </article>
-        <article class="case">
-          <div class="metric"><span class="big">0<small>invented claims allowed</small></span><span class="pill research">Built</span></div>
-          <h4>Applying for jobs without inflating anything</h4>
-          <div class="where">Job Match Pipeline · Python, Claude API · 2026</div>
-          <div class="steps"><p><b>What I did</b>Built a pipeline that scores each posting against a verified bank of my experience, tailors the CV, and blocks any number or tool the source does not back.</p></div>
-          <div class="result">It is how my current applications are built, with automated tests on every check.</div>
         </article>
       </div>
     </div>
